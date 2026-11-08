@@ -103,7 +103,7 @@ Flickable {
             id: basicSettingsGroupBox
             width: (parent.width - (parent.leftPadding + parent.rightPadding))
             padding: 12
-            title: "<font color=\"skyblue\">" + qsTr("Basic Settings") + "</font>"
+            title: qsTr("Basic Settings")
             font.pointSize: 12
 
             Column {
@@ -879,7 +879,7 @@ Flickable {
             id: audioSettingsGroupBox
             width: (parent.width - (parent.leftPadding + parent.rightPadding))
             padding: 12
-            title: "<font color=\"skyblue\">" + qsTr("Audio Settings") + "</font>"
+            title: qsTr("Audio Settings")
             font.pointSize: 12
 
             Column {
@@ -972,7 +972,7 @@ Flickable {
             id: hostSettingsGroupBox
             width: (parent.width - (parent.leftPadding + parent.rightPadding))
             padding: 12
-            title: "<font color=\"skyblue\">" + qsTr("Host Settings") + "</font>"
+            title: qsTr("Host Settings")
             font.pointSize: 12
 
             Column {
@@ -1012,7 +1012,7 @@ Flickable {
             id: uiSettingsGroupBox
             width: (parent.width - (parent.leftPadding + parent.rightPadding))
             padding: 12
-            title: "<font color=\"skyblue\">" + qsTr("UI Settings") + "</font>"
+            title: qsTr("UI Settings")
             font.pointSize: 12
 
             Column {
@@ -1321,7 +1321,7 @@ Flickable {
             id: inputSettingsGroupBox
             width: (parent.width - (parent.leftPadding + parent.rightPadding))
             padding: 12
-            title: "<font color=\"skyblue\">" + qsTr("Input Settings") + "</font>"
+            title: qsTr("Input Settings")
             font.pointSize: 12
 
             Column {
@@ -1469,7 +1469,7 @@ Flickable {
             id: gamepadSettingsGroupBox
             width: (parent.width - (parent.leftPadding + parent.rightPadding))
             padding: 12
-            title: "<font color=\"skyblue\">" + qsTr("Gamepad Settings") + "</font>"
+            title: qsTr("Gamepad Settings")
             font.pointSize: 12
 
             Column {
@@ -1544,7 +1544,7 @@ Flickable {
             id: advancedSettingsGroupBox
             width: (parent.width - (parent.leftPadding + parent.rightPadding))
             padding: 12
-            title: "<font color=\"skyblue\">" + qsTr("Advanced Settings") + "</font>"
+            title: qsTr("Advanced Settings")
             font.pointSize: 12
 
             Column {

@@ -45,8 +45,7 @@ Fetched from Apple's HIG JSON (`https://developer.apple.com/tutorials/data/desig
 
 ## Open decisions
 
-- Fork location: local clone only until the user approves creating `craigmdennis/moonlight-qt`.
-- Priority of performance versus security work.
+- Priority of performance versus security work (user has not chosen).
 
 ## Status (2026-11-08, branch selene-mac)
 
