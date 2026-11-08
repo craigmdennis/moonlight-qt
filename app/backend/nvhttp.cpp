@@ -264,9 +264,10 @@ NvHTTP::getWallpaper()
                                           "moonlight/wallpaper",
                                           nullptr,
                                           LONG_REQUEST_TIMEOUT_MS,
-                                          NvLogLevel::NVLL_NONE);
-    // Bound what a host can make us hold in memory
-    QByteArray data = reply->read(MAX_WALLPAPER_BYTES);
+                                          NvLogLevel::NVLL_NONE,
+                                          false,
+                                          MAX_WALLPAPER_BYTES);
+    QByteArray data = reply->readAll();
     delete reply;
     return data;
 }
@@ -522,7 +523,8 @@ NvHTTP::openConnection(QUrl baseUrl,
                        QString arguments,
                        int timeoutMs,
                        NvLogLevel logLevel,
-                       bool usePost)
+                       bool usePost,
+                       qint64 maxBodyBytes)
 {
     // Port must be set
     Q_ASSERT(baseUrl.port(0) != 0);
@@ -559,6 +561,17 @@ NvHTTP::openConnection(QUrl baseUrl,
     auto sslErrorsConnection = connect(m_Nam, &QNetworkAccessManager::sslErrors, this, &NvHTTP::handleSslErrors);
     QNetworkReply* reply = usePost ? m_Nam->post(request, QByteArray()) : m_Nam->get(request);
     QEventLoop loop;
+
+    // Refuse oversized bodies while they download, not after they are in memory: the declared
+    // length is checked up front and the transfer is aborted if more bytes arrive than allowed
+    if (maxBodyBytes > 0) {
+        reply->setReadBufferSize(maxBodyBytes);
+        connect(reply, &QNetworkReply::downloadProgress, reply, [reply, maxBodyBytes](qint64 received, qint64 total) {
+            if (received > maxBodyBytes || total > maxBodyBytes) {
+                reply->abort();
+            }
+        });
+    }
 
     // Connect the quit signals
     connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);

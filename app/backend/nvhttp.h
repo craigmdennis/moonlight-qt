@@ -208,7 +208,8 @@ private:
                    QString arguments,
                    int timeoutMs,
                    NvLogLevel logLevel,
-                   bool usePost = false);
+                   bool usePost = false,
+                   qint64 maxBodyBytes = 0);
 
     NvAddress m_Address;
     QNetworkAccessManager* m_Nam;

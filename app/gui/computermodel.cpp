@@ -8,6 +8,8 @@
 #include <QJsonObject>
 #include <QPointer>
 #include <QImage>
+#include <QImageReader>
+#include <QBuffer>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -357,13 +359,23 @@ static QString fetchWallpaper(NvHTTP& http, const QString& uuid)
 
     try {
         QByteArray bytes = http.getWallpaper();
-        QImage image;
-        if (!image.loadFromData(bytes) || image.width() > 8192 || image.height() > 8192) {
+        // Read the dimensions from the header first, so a small file that declares a huge
+        // image is rejected before any pixel memory is allocated
+        QBuffer buffer(&bytes);
+        buffer.open(QIODevice::ReadOnly);
+        QImageReader reader(&buffer);
+        QSize size = reader.size();
+        if (!size.isValid() || size.width() > 8192 || size.height() > 8192 ||
+                qint64(size.width()) * size.height() > 40LL * 1000 * 1000) {
             return info.exists() ? path : QString();
         }
-        // Downscale: the backdrop is dimmed and blurred behind the grid
-        if (image.width() > 1920) {
-            image = image.scaledToWidth(1920, Qt::SmoothTransformation);
+        // Decode at the size we keep: the backdrop is dimmed behind the grid
+        if (size.width() > 1920) {
+            reader.setScaledSize(QSize(1920, qMax(1, int(qint64(size.height()) * 1920 / size.width()))));
+        }
+        QImage image = reader.read();
+        if (image.isNull()) {
+            return info.exists() ? path : QString();
         }
         QSaveFile file(path);
         if (file.open(QIODevice::WriteOnly) && image.save(&file, "JPG", 80) && file.commit()) {
