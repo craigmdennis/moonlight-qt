@@ -117,14 +117,21 @@ CenteredGridView {
         property alias pcContextMenu : pcContextMenuLoader.item
 
         // Selene state vocabulary: the same words and colours as the Apple TV badge
-        readonly property bool busy: model.statusUnknown
+        readonly property bool busy: model.statusUnknown || model.sleeping
+        readonly property bool inUse: model.online && model.paired && model.busy
         readonly property string badgeText: !model.paired && model.online ? qsTr("Not Paired")
+                                          : inUse ? qsTr("In Use")
                                           : model.online ? qsTr("Online") : qsTr("Offline")
         readonly property color badgeColor: !model.paired && model.online ? "#FFFFFF"
+                                          : inUse ? "#BF5AF2"
                                           : model.online ? "#30D158" : "#8E8E93"
-        readonly property string stateLine: model.statusUnknown ? qsTr("Checking…")
-                                          : !model.online ? (model.wakeable ? qsTr("Offline · Click to wake") : qsTr("Offline"))
+        // Apollo's Steam line (last played, currently playing) wins over the generic text
+        readonly property string stateLine: model.sleeping ? qsTr("Sleeping…")
+                                          : model.statusUnknown ? qsTr("Checking…")
+                                          : !model.online ? (model.statusLine !== "" ? model.statusLine
+                                                             : model.wakeable ? qsTr("Offline · Click to wake") : qsTr("Offline"))
                                           : !model.paired ? qsTr("Found on your network · Click to pair")
+                                          : model.statusLine !== "" ? model.statusLine
                                           : qsTr("Ready to play")
         // A stable tint per computer, so tiles are told apart without game art
         readonly property color tint: Qt.hsla((Math.abs(hashName(model.name)) % 360) / 360, 0.35, 0.28, 1)
@@ -248,6 +255,14 @@ CenteredGridView {
                     text: qsTr("Wake PC")
                     onTriggered: computerModel.wakeComputer(index)
                     visible: !model.online && model.wakeable
+                }
+                NavigableMenuItem {
+                    // Kept for every paired PC so the menu never reorders; disabled while the
+                    // PC cannot be put to sleep (offline, or someone is streaming from it)
+                    text: qsTr("Sleep PC")
+                    onTriggered: computerModel.sleepComputer(index)
+                    visible: model.paired
+                    enabled: model.online && !model.busy
                 }
                 NavigableMenuItem {
                     text: qsTr("Test Network")

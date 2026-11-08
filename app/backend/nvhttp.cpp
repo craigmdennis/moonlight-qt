@@ -245,6 +245,28 @@ NvHTTP::startApp(QString verb,
     rtspSessionUrl = getXmlString(response, "sessionUrl0");
 }
 
+QString
+NvHTTP::getSteamActivity()
+{
+    return openConnectionToString(m_BaseUrlHttps,
+                                  "moonlight/steam",
+                                  nullptr,
+                                  REQUEST_TIMEOUT_MS,
+                                  NvLogLevel::NVLL_NONE);
+}
+
+void
+NvHTTP::sleepHost()
+{
+    QNetworkReply* reply = openConnection(m_BaseUrlHttps,
+                                          "moonlight/sleep",
+                                          nullptr,
+                                          REQUEST_TIMEOUT_MS,
+                                          NvLogLevel::NVLL_ERROR,
+                                          true);
+    delete reply;
+}
+
 void
 NvHTTP::quitApp()
 {
@@ -483,7 +505,8 @@ NvHTTP::openConnection(QUrl baseUrl,
                        QString command,
                        QString arguments,
                        int timeoutMs,
-                       NvLogLevel logLevel)
+                       NvLogLevel logLevel,
+                       bool usePost)
 {
     // Port must be set
     Q_ASSERT(baseUrl.port(0) != 0);
@@ -518,7 +541,7 @@ NvHTTP::openConnection(QUrl baseUrl,
 #endif
 
     auto sslErrorsConnection = connect(m_Nam, &QNetworkAccessManager::sslErrors, this, &NvHTTP::handleSslErrors);
-    QNetworkReply* reply = m_Nam->get(request);
+    QNetworkReply* reply = usePost ? m_Nam->post(request, QByteArray()) : m_Nam->get(request);
     QEventLoop loop;
 
     // Connect the quit signals

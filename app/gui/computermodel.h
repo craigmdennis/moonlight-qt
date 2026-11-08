@@ -2,6 +2,9 @@
 #include "streaming/session.h"
 
 #include <QAbstractListModel>
+#include <QDateTime>
+#include <QTimer>
+#include <QHash>
 
 class ComputerModel : public QAbstractListModel
 {
@@ -16,7 +19,9 @@ class ComputerModel : public QAbstractListModel
         WakeableRole,
         StatusUnknownRole,
         ServerSupportedRole,
-        DetailsRole
+        DetailsRole,
+        StatusLineRole,
+        SleepingRole
     };
 
 public:
@@ -43,18 +48,41 @@ public:
 
     Q_INVOKABLE void renameComputer(int computerIndex, QString name);
 
+    // Apollo only: suspends the PC. The tile shows a spinner for a few seconds, then
+    // Offline, and discovery cannot bring it back Online while the PC finishes suspending.
+    Q_INVOKABLE void sleepComputer(int computerIndex);
+
     Q_INVOKABLE Session* createSessionForCurrentGame(int computerIndex);
+
+    // Called back from worker tasks on the GUI thread
+    void finishSleep(const QString& uuid, bool accepted);
+    void applyActivity(const QString& uuid, const QString& line);
 
 signals:
     void pairingCompleted(QVariant error);
     void connectionTestCompleted(int result, QString blockedPorts);
 
 private slots:
+    void refreshActivity();
+
     void handleComputerStateChanged(NvComputer* computer);
 
     void handlePairingCompleted(NvComputer* computer, QString error);
 
 private:
+    void fetchActivity(NvComputer* computer);
+    void notifyRow(const QString& uuid);
+    void setActivityLine(const QString& uuid, const QString& line);
+    void showNotice(const QString& uuid, const QString& text);
+
+    // Keyed by computer UUID
+    QHash<QString, QString> m_ActivityLines;
+    QHash<QString, QDateTime> m_ActivityFetched;
+    QHash<QString, QDateTime> m_SleepingUntil;
+    QHash<QString, QDateTime> m_OfflineUntil;
+    QHash<QString, QString> m_Notices;
+    QTimer* m_ActivityTimer = nullptr;
+
     QVector<NvComputer*> m_Computers;
     ComputerManager* m_ComputerManager;
 };

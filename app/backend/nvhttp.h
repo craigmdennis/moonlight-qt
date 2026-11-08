@@ -141,6 +141,16 @@ public:
                            int timeoutMs,
                            NvLogLevel logLevel = NvLogLevel::NVLL_VERBOSE);
 
+    // Apollo extensions (not present on GFE/Sunshine, which answer 404)
+
+    // JSON body of GET /moonlight/steam
+    QString
+    getSteamActivity();
+
+    // POST /moonlight/sleep: suspends the host PC
+    void
+    sleepHost();
+
     void setServerCert(QSslCertificate serverCert);
     void setAddress(NvAddress address);
     void setHttpsPort(uint16_t port);
@@ -193,7 +203,8 @@ private:
                    QString command,
                    QString arguments,
                    int timeoutMs,
-                   NvLogLevel logLevel);
+                   NvLogLevel logLevel,
+                   bool usePost = false);
 
     NvAddress m_Address;
     QNetworkAccessManager* m_Nam;
