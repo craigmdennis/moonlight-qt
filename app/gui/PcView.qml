@@ -17,7 +17,7 @@ CenteredGridView {
     activeFocusOnTab: true
     topMargin: 20
     bottomMargin: 5
-    cellWidth: 310; cellHeight: 330;
+    cellWidth: 240; cellHeight: 360;
     objectName: qsTr("Computers")
 
     Component.onCompleted: {
@@ -107,57 +107,115 @@ CenteredGridView {
     model: computerModel
 
     delegate: NavigableItemDelegate {
-        width: 300; height: 320;
+        // The cell is the hit area. The card is inset 8 pt inside it, so a tap that lands
+        // slightly outside the visible card still counts (macOS touch guidance: enlarge
+        // tap targets, not controls).
+        width: pcGrid.cellWidth; height: pcGrid.cellHeight;
+        padding: 0
         grid: pcGrid
 
         property alias pcContextMenu : pcContextMenuLoader.item
 
-        Image {
-            id: pcIcon
-            anchors.horizontalCenter: parent.horizontalCenter
-            source: "qrc:/res/desktop_windows-48px.svg"
-            sourceSize {
-                width: 200
-                height: 200
+        // Selene state vocabulary: the same words and colours as the Apple TV badge
+        readonly property bool busy: model.statusUnknown
+        readonly property string badgeText: !model.paired && model.online ? qsTr("Not Paired")
+                                          : model.online ? qsTr("Online") : qsTr("Offline")
+        readonly property color badgeColor: !model.paired && model.online ? "#FFFFFF"
+                                          : model.online ? "#30D158" : "#8E8E93"
+        readonly property string stateLine: model.statusUnknown ? qsTr("Checking…")
+                                          : !model.online ? (model.wakeable ? qsTr("Offline · Click to wake") : qsTr("Offline"))
+                                          : !model.paired ? qsTr("Found on your network · Click to pair")
+                                          : qsTr("Ready to play")
+        // A stable tint per computer, so tiles are told apart without game art
+        readonly property color tint: Qt.hsla((Math.abs(hashName(model.name)) % 360) / 360, 0.35, 0.28, 1)
+
+        function hashName(n) {
+            var h = 0
+            for (var i = 0; i < n.length; i++) h = (h * 31 + n.charCodeAt(i)) | 0
+            return h
+        }
+
+        background: Item {
+            Rectangle {
+                id: card
+                x: 8; y: 8
+                width: parent.width - 16; height: parent.height - 16 - 30
+                radius: 18
+                color: tint
+                border.width: highlighted ? 3 : 0
+                border.color: palette.highlight
+                scale: hovered || highlighted ? 1.02 : 1.0
+                Behavior on scale { NumberAnimation { duration: 120 } }
+
+                Image {
+                    anchors.centerIn: parent
+                    anchors.verticalCenterOffset: -20
+                    source: "qrc:/res/desktop_windows-48px.svg"
+                    sourceSize { width: 96; height: 96 }
+                    opacity: 0.9
+                }
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: card.radius
+                    gradient: Gradient {
+                        GradientStop { position: 0.5; color: "transparent" }
+                        GradientStop { position: 1.0; color: "#BF000000" }
+                    }
+                }
+
+                Label {
+                    id: pcNameText
+                    text: model.name
+                    anchors { left: parent.left; right: parent.right; bottom: parent.bottom; margins: 14 }
+                    color: "white"
+                    font.pointSize: 17
+                    font.bold: true
+                    maximumLineCount: 2
+                    wrapMode: Text.Wrap
+                    elide: Text.ElideRight
+                }
+
+                // Badge: top right, as on the Apple TV tile
+                Rectangle {
+                    anchors { top: parent.top; right: parent.right; margins: 10 }
+                    height: 26; width: badgeRow.width + 20
+                    radius: height / 2
+                    color: "#99000000"
+                    Row {
+                        id: badgeRow
+                        anchors.centerIn: parent
+                        spacing: 6
+                        BusyIndicator {
+                            visible: busy; running: busy
+                            width: 16; height: 16
+                        }
+                        Rectangle {
+                            visible: !busy
+                            width: 9; height: 9; radius: 4.5
+                            color: badgeColor
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        Label {
+                            visible: !busy
+                            text: badgeText
+                            color: "white"
+                            font.pointSize: 11
+                            font.weight: Font.DemiBold
+                        }
+                    }
+                }
             }
-        }
 
-        Image {
-            // TODO: Tooltip
-            id: stateIcon
-            anchors.horizontalCenter: pcIcon.horizontalCenter
-            anchors.verticalCenter: pcIcon.verticalCenter
-            anchors.verticalCenterOffset: !model.online ? -18 : -16
-            visible: !model.statusUnknown && (!model.online || !model.paired)
-            source: !model.online ? "qrc:/res/warning_FILL1_wght300_GRAD200_opsz24.svg" : "qrc:/res/baseline-lock-24px.svg"
-            sourceSize {
-                width: !model.online ? 75 : 70
-                height: !model.online ? 75 : 70
+            // One line under the card: what happened and what clicking does
+            Label {
+                anchors { left: parent.left; right: parent.right; bottom: parent.bottom; leftMargin: 12; rightMargin: 12; bottomMargin: 6 }
+                text: stateLine
+                elide: Text.ElideRight
+                font.pointSize: 12
+                opacity: 0.7
+                horizontalAlignment: Text.AlignHCenter
             }
-        }
-
-        BusyIndicator {
-            id: statusUnknownSpinner
-            anchors.horizontalCenter: pcIcon.horizontalCenter
-            anchors.verticalCenter: pcIcon.verticalCenter
-            anchors.verticalCenterOffset: -15
-            width: 75
-            height: 75
-            visible: model.statusUnknown
-            running: visible
-        }
-
-        Label {
-            id: pcNameText
-            text: model.name
-
-            width: parent.width
-            anchors.top: pcIcon.bottom
-            anchors.bottom: parent.bottom
-            font.pointSize: 30
-            horizontalAlignment: Text.AlignHCenter
-            wrapMode: Text.Wrap
-            elide: Text.ElideRight
         }
 
         // Display a tooltip with the full name if it's truncated
