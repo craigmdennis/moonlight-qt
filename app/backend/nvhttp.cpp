@@ -14,6 +14,8 @@
 
 #define FAST_FAIL_TIMEOUT_MS 2000
 #define REQUEST_TIMEOUT_MS 5000
+#define LONG_REQUEST_TIMEOUT_MS 20000
+#define MAX_WALLPAPER_BYTES (16 * 1024 * 1024)
 #define LAUNCH_TIMEOUT_MS 120000
 #define RESUME_TIMEOUT_MS 30000
 #define QUIT_TIMEOUT_MS 30000
@@ -253,6 +255,20 @@ NvHTTP::getSteamActivity()
                                   nullptr,
                                   REQUEST_TIMEOUT_MS,
                                   NvLogLevel::NVLL_NONE);
+}
+
+QByteArray
+NvHTTP::getWallpaper()
+{
+    QNetworkReply* reply = openConnection(m_BaseUrlHttps,
+                                          "moonlight/wallpaper",
+                                          nullptr,
+                                          LONG_REQUEST_TIMEOUT_MS,
+                                          NvLogLevel::NVLL_NONE);
+    // Bound what a host can make us hold in memory
+    QByteArray data = reply->read(MAX_WALLPAPER_BYTES);
+    delete reply;
+    return data;
 }
 
 void

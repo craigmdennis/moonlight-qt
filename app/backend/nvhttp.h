@@ -147,6 +147,10 @@ public:
     QString
     getSteamActivity();
 
+    // Raw image bytes of GET /moonlight/wallpaper (the PC's desktop wallpaper)
+    QByteArray
+    getWallpaper();
+
     // POST /moonlight/sleep: suspends the host PC
     void
     sleepHost();

@@ -21,7 +21,8 @@ class ComputerModel : public QAbstractListModel
         ServerSupportedRole,
         DetailsRole,
         StatusLineRole,
-        SleepingRole
+        SleepingRole,
+        BackdropRole
     };
 
 public:
@@ -56,7 +57,7 @@ public:
 
     // Called back from worker tasks on the GUI thread
     void finishSleep(const QString& uuid, bool accepted);
-    void applyActivity(const QString& uuid, const QString& line);
+    void applyActivity(const QString& uuid, const QString& line, const QString& backdropPath);
 
 signals:
     void pairingCompleted(QVariant error);
@@ -81,6 +82,7 @@ private:
     QHash<QString, QDateTime> m_SleepingUntil;
     QHash<QString, QDateTime> m_OfflineUntil;
     QHash<QString, QString> m_Notices;
+    QHash<QString, QString> m_Backdrops;
     QTimer* m_ActivityTimer = nullptr;
 
     QVector<NvComputer*> m_Computers;

@@ -4,8 +4,15 @@
 
 #include <QThreadPool>
 #include <QJsonDocument>
+#include <QRegularExpression>
 #include <QJsonObject>
 #include <QPointer>
+#include <QImage>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QSaveFile>
+#include <QStandardPaths>
 
 // How long the spinner shows after the PC accepts the sleep command, and how long the
 // tile then stays Offline while the PC finishes suspending and still answers discovery.
@@ -63,6 +70,10 @@ QVariant ComputerModel::data(const QModelIndex& index, int role) const
             return false;
         }
         return computer->state == NvComputer::CS_ONLINE;
+    case BackdropRole: {
+        QString path = m_Backdrops.value(computer->uuid);
+        return path.isEmpty() ? QUrl() : QUrl::fromLocalFile(path);
+    }
     case SleepingRole:
         return m_SleepingUntil.value(computer->uuid) > QDateTime::currentDateTime();
     case StatusLineRole: {
@@ -154,6 +165,7 @@ QHash<int, QByteArray> ComputerModel::roleNames() const
     names[DetailsRole] = "details";
     names[StatusLineRole] = "statusLine";
     names[SleepingRole] = "sleeping";
+    names[BackdropRole] = "backdrop";
 
     return names;
 }
@@ -327,6 +339,42 @@ void ComputerModel::showNotice(const QString& uuid, const QString& text)
     });
 }
 
+// Saves the PC's wallpaper under the cache folder and returns its path, or an empty string.
+// The bytes are decoded as an image first, so only a real image of sane size is ever kept.
+static QString fetchWallpaper(NvHTTP& http, const QString& uuid)
+{
+    QString dir = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + "/backdrops";
+    QDir().mkpath(dir);
+    // The UUID comes from the host, so keep only characters safe in a file name
+    QString safe = uuid;
+    safe.replace(QRegularExpression("[^A-Za-z0-9_-]"), "_");
+    QString path = dir + "/" + safe + ".jpg";
+
+    QFileInfo info(path);
+    if (info.exists() && info.lastModified().secsTo(QDateTime::currentDateTime()) < 3600) {
+        return path;
+    }
+
+    try {
+        QByteArray bytes = http.getWallpaper();
+        QImage image;
+        if (!image.loadFromData(bytes) || image.width() > 8192 || image.height() > 8192) {
+            return info.exists() ? path : QString();
+        }
+        // Downscale: the backdrop is dimmed and blurred behind the grid
+        if (image.width() > 1920) {
+            image = image.scaledToWidth(1920, Qt::SmoothTransformation);
+        }
+        QSaveFile file(path);
+        if (file.open(QIODevice::WriteOnly) && image.save(&file, "JPG", 80) && file.commit()) {
+            return path;
+        }
+    } catch (...) {
+        // No Apollo, or no permission: no backdrop
+    }
+    return info.exists() ? path : QString();
+}
+
 class DeferredActivityTask : public QRunnable
 {
 public:
@@ -338,8 +386,10 @@ public:
     void run()
     {
         QString line;
+        QString backdropPath;
         try {
             NvHTTP http(m_Address, m_HttpsPort, m_Cert, m_UseTrueUid);
+            backdropPath = fetchWallpaper(http, m_Uuid);
             QJsonObject o = QJsonDocument::fromJson(http.getSteamActivity().toUtf8()).object();
             if (o.value("sharing").toBool(true) == false) {
                 // The host withholds activity from this device
@@ -362,9 +412,9 @@ public:
         QPointer<ComputerModel> model = m_Model;
         QString uuid = m_Uuid;
         if (model) {
-            QMetaObject::invokeMethod(model.data(), [model, uuid, line]() {
+            QMetaObject::invokeMethod(model.data(), [model, uuid, line, backdropPath]() {
                 if (model) {
-                    model->applyActivity(uuid, line);
+                    model->applyActivity(uuid, line, backdropPath);
                 }
             });
         }
@@ -379,10 +429,18 @@ private:
     bool m_UseTrueUid;
 };
 
-void ComputerModel::applyActivity(const QString& uuid, const QString& line)
+void ComputerModel::applyActivity(const QString& uuid, const QString& line, const QString& backdropPath)
 {
+    bool changed = false;
     if (m_ActivityLines.value(uuid) != line) {
         m_ActivityLines[uuid] = line;
+        changed = true;
+    }
+    if (m_Backdrops.value(uuid) != backdropPath) {
+        m_Backdrops[uuid] = backdropPath;
+        changed = true;
+    }
+    if (changed) {
         notifyRow(uuid);
     }
 }

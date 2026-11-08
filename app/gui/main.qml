@@ -106,6 +106,22 @@ ApplicationWindow {
         }
     }
 
+    // Selene backdrop: the wallpaper of the PC being looked at, dimmed so tiles stay readable
+    Image {
+        anchors.fill: parent
+        source: stackView.currentItem instanceof PcView ? stackView.currentItem.backdropSource : ""
+        fillMode: Image.PreserveAspectCrop
+        asynchronous: true
+        cache: false
+        opacity: status === Image.Ready ? 1 : 0
+        Behavior on opacity { NumberAnimation { duration: 250 } }
+
+        Rectangle {
+            anchors.fill: parent
+            color: "#B3000000"
+        }
+    }
+
     StackView {
         id: stackView
         anchors.fill: parent

@@ -11,6 +11,8 @@ import SdlGamepadKeyNavigation 1.0
 
 CenteredGridView {
     property ComputerModel computerModel : createModel()
+    // Read by main.qml to draw the backdrop behind the grid
+    property url backdropSource
 
     id: pcGrid
     focus: true
@@ -117,6 +119,18 @@ CenteredGridView {
         property alias pcContextMenu : pcContextMenuLoader.item
 
         // Selene state vocabulary: the same words and colours as the Apple TV badge
+        // Wallpaper of this PC, shown behind the grid while the tile is pointed at or selected
+        readonly property url backdrop: model.backdrop
+        onBackdropChanged: updateBackdrop()
+        onHighlightedChanged: updateBackdrop()
+        onHoveredChanged: updateBackdrop()
+        function updateBackdrop() {
+            if (backdrop.toString() !== "" && (highlighted || hovered || pcGrid.backdropSource.toString() === "")) {
+                pcGrid.backdropSource = backdrop
+            }
+        }
+        Component.onCompleted: updateBackdrop()
+
         readonly property bool busy: model.statusUnknown || model.sleeping
         readonly property bool inUse: model.online && model.paired && model.busy
         readonly property string badgeText: !model.paired && model.online ? qsTr("Not Paired")
