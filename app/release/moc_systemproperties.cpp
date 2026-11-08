@@ -56,6 +56,7 @@ template <> constexpr inline auto SystemProperties::qt_create_metaobjectdata<qt_
         "displayIndex",
         "getSafeAreaResolution",
         "getRefreshRate",
+        "localSubnetPrefix",
         "startAsyncLoad",
         "waitForAsyncLoad",
         "refreshDisplays",
@@ -99,40 +100,42 @@ template <> constexpr inline auto SystemProperties::qt_create_metaobjectdata<qt_
         QtMocHelpers::MethodData<int(int)>(17, 2, QMC::AccessPublic, QMetaType::Int, {{
             { QMetaType::Int, 15 },
         }}),
+        // Method 'localSubnetPrefix'
+        QtMocHelpers::MethodData<QString()>(18, 2, QMC::AccessPublic, QMetaType::QString),
         // Method 'startAsyncLoad'
-        QtMocHelpers::MethodData<void()>(18, 2, QMC::AccessPublic, QMetaType::Void),
-        // Method 'waitForAsyncLoad'
         QtMocHelpers::MethodData<void()>(19, 2, QMC::AccessPublic, QMetaType::Void),
-        // Method 'refreshDisplays'
+        // Method 'waitForAsyncLoad'
         QtMocHelpers::MethodData<void()>(20, 2, QMC::AccessPublic, QMetaType::Void),
+        // Method 'refreshDisplays'
+        QtMocHelpers::MethodData<void()>(21, 2, QMC::AccessPublic, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
         // property 'isRunningWayland'
-        QtMocHelpers::PropertyData<bool>(21, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Constant),
-        // property 'isRunningXWayland'
         QtMocHelpers::PropertyData<bool>(22, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Constant),
-        // property 'isWow64'
+        // property 'isRunningXWayland'
         QtMocHelpers::PropertyData<bool>(23, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Constant),
-        // property 'isDarwin'
+        // property 'isWow64'
         QtMocHelpers::PropertyData<bool>(24, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Constant),
+        // property 'isDarwin'
+        QtMocHelpers::PropertyData<bool>(25, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Constant),
         // property 'friendlyNativeArchName'
-        QtMocHelpers::PropertyData<QString>(25, QMetaType::QString, QMC::DefaultPropertyFlags | QMC::Constant),
+        QtMocHelpers::PropertyData<QString>(26, QMetaType::QString, QMC::DefaultPropertyFlags | QMC::Constant),
         // property 'hasDesktopEnvironment'
-        QtMocHelpers::PropertyData<bool>(26, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Constant),
-        // property 'hasBrowser'
         QtMocHelpers::PropertyData<bool>(27, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Constant),
-        // property 'hasDiscordIntegration'
+        // property 'hasBrowser'
         QtMocHelpers::PropertyData<bool>(28, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Constant),
-        // property 'usesMaterial3Theme'
+        // property 'hasDiscordIntegration'
         QtMocHelpers::PropertyData<bool>(29, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Constant),
+        // property 'usesMaterial3Theme'
+        QtMocHelpers::PropertyData<bool>(30, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Constant),
         // property 'versionString'
-        QtMocHelpers::PropertyData<QString>(30, QMetaType::QString, QMC::DefaultPropertyFlags | QMC::Constant),
+        QtMocHelpers::PropertyData<QString>(31, QMetaType::QString, QMC::DefaultPropertyFlags | QMC::Constant),
         // property 'hasHardwareAcceleration'
         QtMocHelpers::PropertyData<bool>(8, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Writable, 1),
         // property 'rendererAlwaysFullScreen'
         QtMocHelpers::PropertyData<bool>(9, QMetaType::Bool, QMC::DefaultPropertyFlags | QMC::Writable, 2),
         // property 'unmappedGamepads'
-        QtMocHelpers::PropertyData<QString>(31, QMetaType::QString, QMC::DefaultPropertyFlags | QMC::Writable, 0),
+        QtMocHelpers::PropertyData<QString>(32, QMetaType::QString, QMC::DefaultPropertyFlags | QMC::Writable, 0),
         // property 'maximumResolution'
         QtMocHelpers::PropertyData<QSize>(11, 0x80000000 | 10, QMC::DefaultPropertyFlags | QMC::Writable | QMC::EnumOrFlag, 3),
         // property 'supportsHdr'
@@ -170,9 +173,11 @@ void SystemProperties::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
             if (_a[0]) *reinterpret_cast<QRect*>(_a[0]) = std::move(_r); }  break;
         case 8: { int _r = _t->getRefreshRate((*reinterpret_cast<std::add_pointer_t<int>>(_a[1])));
             if (_a[0]) *reinterpret_cast<int*>(_a[0]) = std::move(_r); }  break;
-        case 9: _t->startAsyncLoad(); break;
-        case 10: _t->waitForAsyncLoad(); break;
-        case 11: _t->refreshDisplays(); break;
+        case 9: { QString _r = _t->localSubnetPrefix();
+            if (_a[0]) *reinterpret_cast<QString*>(_a[0]) = std::move(_r); }  break;
+        case 10: _t->startAsyncLoad(); break;
+        case 11: _t->waitForAsyncLoad(); break;
+        case 12: _t->refreshDisplays(); break;
         default: ;
         }
     }
@@ -256,14 +261,14 @@ int SystemProperties::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 12)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 13;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 12)
+        if (_id < 13)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 12;
+        _id -= 13;
     }
     if (_c == QMetaObject::ReadProperty || _c == QMetaObject::WriteProperty
             || _c == QMetaObject::ResetProperty || _c == QMetaObject::BindableProperty

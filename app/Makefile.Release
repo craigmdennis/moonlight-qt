@@ -112,6 +112,7 @@ SOURCES       = backend/nvaddress.cpp \
 		release/gui_NavigableMenu_qml.cpp \
 		release/gui_NavigableMenuItem_qml.cpp \
 		release/gui_ErrorMessageDialog_qml.cpp \
+		release/gui_PairingDialog_qml.cpp \
 		release/gui_CliStartStreamSegue_qml.cpp \
 		release/gui_StreamSegue_qml.cpp \
 		release/gui_NavigableMessageDialog_qml.cpp \
@@ -201,6 +202,7 @@ OBJECTS       = release/nvaddress.o \
 		release/gui_NavigableMenu_qml.o \
 		release/gui_NavigableMenuItem_qml.o \
 		release/gui_ErrorMessageDialog_qml.o \
+		release/gui_PairingDialog_qml.o \
 		release/gui_CliStartStreamSegue_qml.o \
 		release/gui_StreamSegue_qml.o \
 		release/gui_NavigableMessageDialog_qml.o \
@@ -440,7 +442,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents gui/GamepadMapper.qml gui/CenteredGridView.qml gui/PcView.qml gui/NavigableToolButton.qml gui/CliQuitStreamSegue.qml gui/AutoResizingComboBox.qml gui/SettingsView.qml gui/NavigableItemDelegate.qml gui/NavigableDialog.qml gui/NavigableMenu.qml gui/NavigableMenuItem.qml gui/ErrorMessageDialog.qml gui/CliStartStreamSegue.qml gui/StreamSegue.qml gui/NavigableMessageDialog.qml gui/AppView.qml gui/QuitSegue.qml gui/main.qml gui/CliPair.qml $(DISTDIR)/
+	$(COPY_FILE) --parents gui/GamepadMapper.qml gui/CenteredGridView.qml gui/PcView.qml gui/NavigableToolButton.qml gui/CliQuitStreamSegue.qml gui/AutoResizingComboBox.qml gui/SettingsView.qml gui/NavigableItemDelegate.qml gui/NavigableDialog.qml gui/NavigableMenu.qml gui/NavigableMenuItem.qml gui/ErrorMessageDialog.qml gui/PairingDialog.qml gui/CliStartStreamSegue.qml gui/StreamSegue.qml gui/NavigableMessageDialog.qml gui/AppView.qml gui/QuitSegue.qml gui/main.qml gui/CliPair.qml $(DISTDIR)/
 	$(COPY_FILE) --parents qml.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents resources.qrc qml_qmlcache.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/homebrew/share/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
@@ -472,9 +474,9 @@ check: first
 
 benchmark: first
 
-compiler_qmlcache_make_all: release/gui_GamepadMapper_qml.cpp release/gui_CenteredGridView_qml.cpp release/gui_PcView_qml.cpp release/gui_NavigableToolButton_qml.cpp release/gui_CliQuitStreamSegue_qml.cpp release/gui_AutoResizingComboBox_qml.cpp release/gui_SettingsView_qml.cpp release/gui_NavigableItemDelegate_qml.cpp release/gui_NavigableDialog_qml.cpp release/gui_NavigableMenu_qml.cpp release/gui_NavigableMenuItem_qml.cpp release/gui_ErrorMessageDialog_qml.cpp release/gui_CliStartStreamSegue_qml.cpp release/gui_StreamSegue_qml.cpp release/gui_NavigableMessageDialog_qml.cpp release/gui_AppView_qml.cpp release/gui_QuitSegue_qml.cpp release/gui_main_qml.cpp release/gui_CliPair_qml.cpp
+compiler_qmlcache_make_all: release/gui_GamepadMapper_qml.cpp release/gui_CenteredGridView_qml.cpp release/gui_PcView_qml.cpp release/gui_NavigableToolButton_qml.cpp release/gui_CliQuitStreamSegue_qml.cpp release/gui_AutoResizingComboBox_qml.cpp release/gui_SettingsView_qml.cpp release/gui_NavigableItemDelegate_qml.cpp release/gui_NavigableDialog_qml.cpp release/gui_NavigableMenu_qml.cpp release/gui_NavigableMenuItem_qml.cpp release/gui_ErrorMessageDialog_qml.cpp release/gui_PairingDialog_qml.cpp release/gui_CliStartStreamSegue_qml.cpp release/gui_StreamSegue_qml.cpp release/gui_NavigableMessageDialog_qml.cpp release/gui_AppView_qml.cpp release/gui_QuitSegue_qml.cpp release/gui_main_qml.cpp release/gui_CliPair_qml.cpp
 compiler_qmlcache_clean:
-	-$(DEL_FILE) release/gui_GamepadMapper_qml.cpp release/gui_CenteredGridView_qml.cpp release/gui_PcView_qml.cpp release/gui_NavigableToolButton_qml.cpp release/gui_CliQuitStreamSegue_qml.cpp release/gui_AutoResizingComboBox_qml.cpp release/gui_SettingsView_qml.cpp release/gui_NavigableItemDelegate_qml.cpp release/gui_NavigableDialog_qml.cpp release/gui_NavigableMenu_qml.cpp release/gui_NavigableMenuItem_qml.cpp release/gui_ErrorMessageDialog_qml.cpp release/gui_CliStartStreamSegue_qml.cpp release/gui_StreamSegue_qml.cpp release/gui_NavigableMessageDialog_qml.cpp release/gui_AppView_qml.cpp release/gui_QuitSegue_qml.cpp release/gui_main_qml.cpp release/gui_CliPair_qml.cpp
+	-$(DEL_FILE) release/gui_GamepadMapper_qml.cpp release/gui_CenteredGridView_qml.cpp release/gui_PcView_qml.cpp release/gui_NavigableToolButton_qml.cpp release/gui_CliQuitStreamSegue_qml.cpp release/gui_AutoResizingComboBox_qml.cpp release/gui_SettingsView_qml.cpp release/gui_NavigableItemDelegate_qml.cpp release/gui_NavigableDialog_qml.cpp release/gui_NavigableMenu_qml.cpp release/gui_NavigableMenuItem_qml.cpp release/gui_ErrorMessageDialog_qml.cpp release/gui_PairingDialog_qml.cpp release/gui_CliStartStreamSegue_qml.cpp release/gui_StreamSegue_qml.cpp release/gui_NavigableMessageDialog_qml.cpp release/gui_AppView_qml.cpp release/gui_QuitSegue_qml.cpp release/gui_main_qml.cpp release/gui_CliPair_qml.cpp
 release/gui_GamepadMapper_qml.cpp: gui/GamepadMapper.qml \
 		/opt/homebrew/share/qt/libexec/qmlcachegen
 	/opt/homebrew/share/qt/libexec/qmlcachegen --resource=/Users/craigmdennis/Projects/moonlight-qt/app/qml.qrc -o release/gui_GamepadMapper_qml.cpp gui/GamepadMapper.qml
@@ -522,6 +524,10 @@ release/gui_NavigableMenuItem_qml.cpp: gui/NavigableMenuItem.qml \
 release/gui_ErrorMessageDialog_qml.cpp: gui/ErrorMessageDialog.qml \
 		/opt/homebrew/share/qt/libexec/qmlcachegen
 	/opt/homebrew/share/qt/libexec/qmlcachegen --resource=/Users/craigmdennis/Projects/moonlight-qt/app/qml.qrc -o release/gui_ErrorMessageDialog_qml.cpp gui/ErrorMessageDialog.qml
+
+release/gui_PairingDialog_qml.cpp: gui/PairingDialog.qml \
+		/opt/homebrew/share/qt/libexec/qmlcachegen
+	/opt/homebrew/share/qt/libexec/qmlcachegen --resource=/Users/craigmdennis/Projects/moonlight-qt/app/qml.qrc -o release/gui_PairingDialog_qml.cpp gui/PairingDialog.qml
 
 release/gui_CliStartStreamSegue_qml.cpp: gui/CliStartStreamSegue.qml \
 		/opt/homebrew/share/qt/libexec/qmlcachegen
@@ -668,6 +674,7 @@ release/qrc_qml_qmlcache.cpp: qml_qmlcache.qrc \
 		gui/NavigableMenu.qml \
 		gui/NavigableMenuItem.qml \
 		gui/ErrorMessageDialog.qml \
+		gui/PairingDialog.qml \
 		gui/CliStartStreamSegue.qml \
 		gui/StreamSegue.qml \
 		gui/NavigableMessageDialog.qml \
@@ -1211,6 +1218,10 @@ release/moc_computermodel.cpp: gui/computermodel.h \
 		../libs/mac/include/SDL2/SDL_ttf.h \
 		/opt/homebrew/include/QtCore/QAbstractListModel \
 		/opt/homebrew/include/QtCore/qabstractitemmodel.h \
+		/opt/homebrew/include/QtCore/QDateTime \
+		/opt/homebrew/include/QtCore/qdatetime.h \
+		/opt/homebrew/include/QtCore/QHash \
+		/opt/homebrew/include/QtCore/qhash.h \
 		release/moc_predefs.h \
 		/opt/homebrew/share/qt/libexec/moc
 	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/craigmdennis/Projects/moonlight-qt/app/release/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/craigmdennis/Projects/moonlight-qt/app -I/Users/craigmdennis/Projects/moonlight-qt/libs/mac/include -I/Users/craigmdennis/Projects/moonlight-qt/libs/mac/include/SDL2 -I/Users/craigmdennis/Projects/moonlight-qt/moonlight-common-c/moonlight-common-c/src -I/Users/craigmdennis/Projects/moonlight-qt/qmdnsengine/qmdnsengine/src/include -I/Users/craigmdennis/Projects/moonlight-qt/qmdnsengine -I/Users/craigmdennis/Projects/moonlight-qt/h264bitstream -I/Users/craigmdennis/Projects/moonlight-qt/AntiHooking -I/opt/homebrew/include/QtQuickControls2 -I/opt/homebrew/include/QtQuick -I/opt/homebrew/include/QtOpenGL -I/opt/homebrew/include/QtSvg -I/opt/homebrew/include/QtGui -I/opt/homebrew/include/QtQml -I/opt/homebrew/include -I/opt/homebrew/include/QtQmlIntegration -I/opt/homebrew/include/QtNetwork -I/opt/homebrew/include/QtCore -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/21/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/opt/homebrew/lib gui/computermodel.h -o release/moc_computermodel.cpp
@@ -1656,6 +1667,9 @@ release/computermanager.moc: backend/computermanager.cpp \
 		/opt/homebrew/include/QtCore/qcoreapplication.h \
 		/opt/homebrew/include/QtCore/QRandomGenerator \
 		/opt/homebrew/include/QtCore/qrandom.h \
+		/opt/homebrew/include/QtCore/qmetatype.h \
+		/opt/homebrew/include/QtCore/qtmochelpers.h \
+		/opt/homebrew/include/QtCore/qxptype_traits.h \
 		release/moc_predefs.h \
 		/opt/homebrew/share/qt/libexec/moc
 	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/craigmdennis/Projects/moonlight-qt/app/release/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/craigmdennis/Projects/moonlight-qt/app -I/Users/craigmdennis/Projects/moonlight-qt/libs/mac/include -I/Users/craigmdennis/Projects/moonlight-qt/libs/mac/include/SDL2 -I/Users/craigmdennis/Projects/moonlight-qt/moonlight-common-c/moonlight-common-c/src -I/Users/craigmdennis/Projects/moonlight-qt/qmdnsengine/qmdnsengine/src/include -I/Users/craigmdennis/Projects/moonlight-qt/qmdnsengine -I/Users/craigmdennis/Projects/moonlight-qt/h264bitstream -I/Users/craigmdennis/Projects/moonlight-qt/AntiHooking -I/opt/homebrew/include/QtQuickControls2 -I/opt/homebrew/include/QtQuick -I/opt/homebrew/include/QtOpenGL -I/opt/homebrew/include/QtSvg -I/opt/homebrew/include/QtGui -I/opt/homebrew/include/QtQml -I/opt/homebrew/include -I/opt/homebrew/include/QtQmlIntegration -I/opt/homebrew/include/QtNetwork -I/opt/homebrew/include/QtCore -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/21/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/opt/homebrew/lib backend/computermanager.cpp -o release/computermanager.moc
@@ -1736,6 +1750,9 @@ release/boxartmanager.moc: backend/boxartmanager.cpp \
 		/opt/homebrew/include/QtGui/qimagereader.h \
 		/opt/homebrew/include/QtGui/QImageWriter \
 		/opt/homebrew/include/QtGui/qimagewriter.h \
+		/opt/homebrew/include/QtCore/qmetatype.h \
+		/opt/homebrew/include/QtCore/qtmochelpers.h \
+		/opt/homebrew/include/QtCore/qxptype_traits.h \
 		release/moc_predefs.h \
 		/opt/homebrew/share/qt/libexec/moc
 	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/craigmdennis/Projects/moonlight-qt/app/release/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/craigmdennis/Projects/moonlight-qt/app -I/Users/craigmdennis/Projects/moonlight-qt/libs/mac/include -I/Users/craigmdennis/Projects/moonlight-qt/libs/mac/include/SDL2 -I/Users/craigmdennis/Projects/moonlight-qt/moonlight-common-c/moonlight-common-c/src -I/Users/craigmdennis/Projects/moonlight-qt/qmdnsengine/qmdnsengine/src/include -I/Users/craigmdennis/Projects/moonlight-qt/qmdnsengine -I/Users/craigmdennis/Projects/moonlight-qt/h264bitstream -I/Users/craigmdennis/Projects/moonlight-qt/AntiHooking -I/opt/homebrew/include/QtQuickControls2 -I/opt/homebrew/include/QtQuick -I/opt/homebrew/include/QtOpenGL -I/opt/homebrew/include/QtSvg -I/opt/homebrew/include/QtGui -I/opt/homebrew/include/QtQml -I/opt/homebrew/include -I/opt/homebrew/include/QtQmlIntegration -I/opt/homebrew/include/QtNetwork -I/opt/homebrew/include/QtCore -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/21/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/opt/homebrew/lib backend/boxartmanager.cpp -o release/boxartmanager.moc
@@ -1883,8 +1900,21 @@ release/computermodel.moc: gui/computermodel.cpp \
 		../libs/mac/include/SDL2/SDL_ttf.h \
 		/opt/homebrew/include/QtCore/QAbstractListModel \
 		/opt/homebrew/include/QtCore/qabstractitemmodel.h \
+		/opt/homebrew/include/QtCore/QDateTime \
+		/opt/homebrew/include/QtCore/qdatetime.h \
+		/opt/homebrew/include/QtCore/QHash \
+		/opt/homebrew/include/QtCore/qhash.h \
 		/opt/homebrew/include/QtCore/QThreadPool \
 		/opt/homebrew/include/QtCore/qthreadpool.h \
+		/opt/homebrew/include/QtCore/QJsonDocument \
+		/opt/homebrew/include/QtCore/qjsondocument.h \
+		/opt/homebrew/include/QtCore/QJsonObject \
+		/opt/homebrew/include/QtCore/qjsonobject.h \
+		/opt/homebrew/include/QtCore/QPointer \
+		/opt/homebrew/include/QtCore/qpointer.h \
+		/opt/homebrew/include/QtCore/qmetatype.h \
+		/opt/homebrew/include/QtCore/qtmochelpers.h \
+		/opt/homebrew/include/QtCore/qxptype_traits.h \
 		release/moc_predefs.h \
 		/opt/homebrew/share/qt/libexec/moc
 	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/craigmdennis/Projects/moonlight-qt/app/release/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/craigmdennis/Projects/moonlight-qt/app -I/Users/craigmdennis/Projects/moonlight-qt/libs/mac/include -I/Users/craigmdennis/Projects/moonlight-qt/libs/mac/include/SDL2 -I/Users/craigmdennis/Projects/moonlight-qt/moonlight-common-c/moonlight-common-c/src -I/Users/craigmdennis/Projects/moonlight-qt/qmdnsengine/qmdnsengine/src/include -I/Users/craigmdennis/Projects/moonlight-qt/qmdnsengine -I/Users/craigmdennis/Projects/moonlight-qt/h264bitstream -I/Users/craigmdennis/Projects/moonlight-qt/AntiHooking -I/opt/homebrew/include/QtQuickControls2 -I/opt/homebrew/include/QtQuick -I/opt/homebrew/include/QtOpenGL -I/opt/homebrew/include/QtSvg -I/opt/homebrew/include/QtGui -I/opt/homebrew/include/QtQml -I/opt/homebrew/include -I/opt/homebrew/include/QtQmlIntegration -I/opt/homebrew/include/QtNetwork -I/opt/homebrew/include/QtCore -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/21/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/opt/homebrew/lib gui/computermodel.cpp -o release/computermodel.moc
@@ -2274,6 +2304,10 @@ release/main.o: main.cpp /opt/homebrew/include/QtGui/QGuiApplication \
 		/opt/homebrew/include/QtCore/QtGlobal \
 		/opt/homebrew/include/QtCore/QAbstractListModel \
 		/opt/homebrew/include/QtCore/qabstractitemmodel.h \
+		/opt/homebrew/include/QtCore/QDateTime \
+		/opt/homebrew/include/QtCore/qdatetime.h \
+		/opt/homebrew/include/QtCore/QHash \
+		/opt/homebrew/include/QtCore/qhash.h \
 		gui/appmodel.h \
 		backend/boxartmanager.h \
 		/opt/homebrew/include/QtCore/QDir \
@@ -2709,7 +2743,10 @@ release/computermanager.o: backend/computermanager.cpp backend/computermanager.h
 		/opt/homebrew/include/QtCore/qcoreapplication.h \
 		/opt/homebrew/include/QtCore/QRandomGenerator \
 		/opt/homebrew/include/QtCore/qrandom.h \
-		release/computermanager.moc
+		release/computermanager.moc \
+		/opt/homebrew/include/QtCore/qmetatype.h \
+		/opt/homebrew/include/QtCore/qtmochelpers.h \
+		/opt/homebrew/include/QtCore/qxptype_traits.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/computermanager.o backend/computermanager.cpp
 
 release/boxartmanager.o: backend/boxartmanager.cpp backend/boxartmanager.h \
@@ -2787,7 +2824,10 @@ release/boxartmanager.o: backend/boxartmanager.cpp backend/boxartmanager.h \
 		/opt/homebrew/include/QtGui/qimagereader.h \
 		/opt/homebrew/include/QtGui/QImageWriter \
 		/opt/homebrew/include/QtGui/qimagewriter.h \
-		release/boxartmanager.moc
+		release/boxartmanager.moc \
+		/opt/homebrew/include/QtCore/qmetatype.h \
+		/opt/homebrew/include/QtCore/qtmochelpers.h \
+		/opt/homebrew/include/QtCore/qxptype_traits.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/boxartmanager.o backend/boxartmanager.cpp
 
 release/richpresencemanager.o: backend/richpresencemanager.cpp backend/richpresencemanager.h \
@@ -4676,9 +4716,22 @@ release/computermodel.o: gui/computermodel.cpp gui/computermodel.h \
 		../libs/mac/include/SDL2/SDL_ttf.h \
 		/opt/homebrew/include/QtCore/QAbstractListModel \
 		/opt/homebrew/include/QtCore/qabstractitemmodel.h \
+		/opt/homebrew/include/QtCore/QDateTime \
+		/opt/homebrew/include/QtCore/qdatetime.h \
+		/opt/homebrew/include/QtCore/QHash \
+		/opt/homebrew/include/QtCore/qhash.h \
 		/opt/homebrew/include/QtCore/QThreadPool \
 		/opt/homebrew/include/QtCore/qthreadpool.h \
-		release/computermodel.moc
+		/opt/homebrew/include/QtCore/QJsonDocument \
+		/opt/homebrew/include/QtCore/qjsondocument.h \
+		/opt/homebrew/include/QtCore/QJsonObject \
+		/opt/homebrew/include/QtCore/qjsonobject.h \
+		/opt/homebrew/include/QtCore/QPointer \
+		/opt/homebrew/include/QtCore/qpointer.h \
+		release/computermodel.moc \
+		/opt/homebrew/include/QtCore/qmetatype.h \
+		/opt/homebrew/include/QtCore/qtmochelpers.h \
+		/opt/homebrew/include/QtCore/qxptype_traits.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/computermodel.o gui/computermodel.cpp
 
 release/appmodel.o: gui/appmodel.cpp gui/appmodel.h \
@@ -7417,6 +7470,9 @@ release/gui_NavigableMenuItem_qml.o: release/gui_NavigableMenuItem_qml.cpp
 
 release/gui_ErrorMessageDialog_qml.o: release/gui_ErrorMessageDialog_qml.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/gui_ErrorMessageDialog_qml.o release/gui_ErrorMessageDialog_qml.cpp
+
+release/gui_PairingDialog_qml.o: release/gui_PairingDialog_qml.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/gui_PairingDialog_qml.o release/gui_PairingDialog_qml.cpp
 
 release/gui_CliStartStreamSegue_qml.o: release/gui_CliStartStreamSegue_qml.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/gui_CliStartStreamSegue_qml.o release/gui_CliStartStreamSegue_qml.cpp

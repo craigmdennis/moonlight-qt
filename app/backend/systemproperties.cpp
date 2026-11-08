@@ -1,4 +1,7 @@
 #include "systemproperties.h"
+
+#include <QHostAddress>
+#include <QNetworkInterface>
 #include "utils.h"
 
 #include <QGuiApplication>
@@ -276,4 +279,27 @@ void SystemProperties::refreshDisplays()
     }
 
     SDL_QuitSubSystem(SDL_INIT_VIDEO);
+}
+
+QString SystemProperties::localSubnetPrefix()
+{
+    for (const QNetworkInterface& iface : QNetworkInterface::allInterfaces()) {
+        if (!(iface.flags() & QNetworkInterface::IsUp) || !(iface.flags() & QNetworkInterface::IsRunning) ||
+                (iface.flags() & QNetworkInterface::IsLoopBack)) {
+            continue;
+        }
+        for (const QNetworkAddressEntry& entry : iface.addressEntries()) {
+            QHostAddress ip = entry.ip();
+            if (ip.protocol() != QAbstractSocket::IPv4Protocol) {
+                continue;
+            }
+            // RFC 1918 ranges only: 10/8, 172.16/12, 192.168/16
+            quint32 v4 = ip.toIPv4Address();
+            bool isPrivate = (v4 >> 24) == 10 || (v4 >> 20) == 0xAC1 || (v4 >> 16) == 0xC0A8;
+            if (isPrivate) {
+                return QString("%1.%2.%3.").arg((v4 >> 24) & 0xFF).arg((v4 >> 16) & 0xFF).arg((v4 >> 8) & 0xFF);
+            }
+        }
+    }
+    return QString();
 }

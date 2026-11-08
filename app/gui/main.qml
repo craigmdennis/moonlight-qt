@@ -522,11 +522,15 @@ ApplicationWindow {
 
     NavigableDialog {
         id: addPcDialog
-        property string label: qsTr("Enter the IP address of your host PC:")
+        property string label: qsTr("Enter the IP address or hostname of your host PC:")
 
         standardButtons: Dialog.Ok | Dialog.Cancel
 
         onOpened: {
+            // Prefilled with this Mac's own network, so usually only the last number is typed
+            editText.text = SystemProperties.localSubnetPrefix()
+            editText.cursorPosition = editText.text.length
+
             // Force keyboard focus on the textbox so keyboard navigation works
             editText.forceActiveFocus()
         }

@@ -133,6 +133,14 @@ namespace _gui_NavigableMessageDialog_qml {
         reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], &validateLookupSignatures
     };
 }
+namespace _gui_PairingDialog_qml { 
+    extern bool validateLookupSignatures(QQmlEngine *engine, QV4::CompiledData::CompilationUnit *cu);
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], &validateLookupSignatures
+    };
+}
 namespace _gui_NavigableDialog_qml { 
     extern bool validateLookupSignatures(QQmlEngine *engine, QV4::CompiledData::CompilationUnit *cu);
     extern const unsigned char qmlData[];
@@ -187,6 +195,7 @@ Registry::Registry() {
     resourcePathToCachedUnit.insert(QStringLiteral("/gui/NavigableMenu.qml"), &QmlCacheGeneratedCode::_gui_NavigableMenu_qml::unit);
     resourcePathToCachedUnit.insert(QStringLiteral("/gui/ErrorMessageDialog.qml"), &QmlCacheGeneratedCode::_gui_ErrorMessageDialog_qml::unit);
     resourcePathToCachedUnit.insert(QStringLiteral("/gui/NavigableMessageDialog.qml"), &QmlCacheGeneratedCode::_gui_NavigableMessageDialog_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/gui/PairingDialog.qml"), &QmlCacheGeneratedCode::_gui_PairingDialog_qml::unit);
     resourcePathToCachedUnit.insert(QStringLiteral("/gui/NavigableDialog.qml"), &QmlCacheGeneratedCode::_gui_NavigableDialog_qml::unit);
     resourcePathToCachedUnit.insert(QStringLiteral("/gui/CenteredGridView.qml"), &QmlCacheGeneratedCode::_gui_CenteredGridView_qml::unit);
     resourcePathToCachedUnit.insert(QStringLiteral("/gui/CliPair.qml"), &QmlCacheGeneratedCode::_gui_CliPair_qml::unit);

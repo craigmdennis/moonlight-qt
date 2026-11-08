@@ -536,6 +536,7 @@ debug/qrc_qml.cpp: qml.qrc \
 		gui/NavigableMenu.qml \
 		gui/NavigableMenuItem.qml \
 		gui/ErrorMessageDialog.qml \
+		gui/PairingDialog.qml \
 		gui/CliStartStreamSegue.qml \
 		gui/StreamSegue.qml \
 		gui/NavigableMessageDialog.qml \
@@ -1079,6 +1080,10 @@ debug/moc_computermodel.cpp: gui/computermodel.h \
 		../libs/mac/include/SDL2/SDL_ttf.h \
 		/opt/homebrew/include/QtCore/QAbstractListModel \
 		/opt/homebrew/include/QtCore/qabstractitemmodel.h \
+		/opt/homebrew/include/QtCore/QDateTime \
+		/opt/homebrew/include/QtCore/qdatetime.h \
+		/opt/homebrew/include/QtCore/QHash \
+		/opt/homebrew/include/QtCore/qhash.h \
 		debug/moc_predefs.h \
 		/opt/homebrew/share/qt/libexec/moc
 	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/craigmdennis/Projects/moonlight-qt/app/debug/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/craigmdennis/Projects/moonlight-qt/app -I/Users/craigmdennis/Projects/moonlight-qt/libs/mac/include -I/Users/craigmdennis/Projects/moonlight-qt/libs/mac/include/SDL2 -I/Users/craigmdennis/Projects/moonlight-qt/moonlight-common-c/moonlight-common-c/src -I/Users/craigmdennis/Projects/moonlight-qt/qmdnsengine/qmdnsengine/src/include -I/Users/craigmdennis/Projects/moonlight-qt/qmdnsengine -I/Users/craigmdennis/Projects/moonlight-qt/h264bitstream -I/Users/craigmdennis/Projects/moonlight-qt/AntiHooking -I/opt/homebrew/include/QtQuickControls2 -I/opt/homebrew/include/QtQuick -I/opt/homebrew/include/QtOpenGL -I/opt/homebrew/include/QtSvg -I/opt/homebrew/include/QtGui -I/opt/homebrew/include/QtQml -I/opt/homebrew/include -I/opt/homebrew/include/QtQmlIntegration -I/opt/homebrew/include/QtNetwork -I/opt/homebrew/include/QtCore -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/21/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/opt/homebrew/lib gui/computermodel.h -o debug/moc_computermodel.cpp
@@ -1751,8 +1756,18 @@ debug/computermodel.moc: gui/computermodel.cpp \
 		../libs/mac/include/SDL2/SDL_ttf.h \
 		/opt/homebrew/include/QtCore/QAbstractListModel \
 		/opt/homebrew/include/QtCore/qabstractitemmodel.h \
+		/opt/homebrew/include/QtCore/QDateTime \
+		/opt/homebrew/include/QtCore/qdatetime.h \
+		/opt/homebrew/include/QtCore/QHash \
+		/opt/homebrew/include/QtCore/qhash.h \
 		/opt/homebrew/include/QtCore/QThreadPool \
 		/opt/homebrew/include/QtCore/qthreadpool.h \
+		/opt/homebrew/include/QtCore/QJsonDocument \
+		/opt/homebrew/include/QtCore/qjsondocument.h \
+		/opt/homebrew/include/QtCore/QJsonObject \
+		/opt/homebrew/include/QtCore/qjsonobject.h \
+		/opt/homebrew/include/QtCore/QPointer \
+		/opt/homebrew/include/QtCore/qpointer.h \
 		debug/moc_predefs.h \
 		/opt/homebrew/share/qt/libexec/moc
 	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/craigmdennis/Projects/moonlight-qt/app/debug/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/craigmdennis/Projects/moonlight-qt/app -I/Users/craigmdennis/Projects/moonlight-qt/libs/mac/include -I/Users/craigmdennis/Projects/moonlight-qt/libs/mac/include/SDL2 -I/Users/craigmdennis/Projects/moonlight-qt/moonlight-common-c/moonlight-common-c/src -I/Users/craigmdennis/Projects/moonlight-qt/qmdnsengine/qmdnsengine/src/include -I/Users/craigmdennis/Projects/moonlight-qt/qmdnsengine -I/Users/craigmdennis/Projects/moonlight-qt/h264bitstream -I/Users/craigmdennis/Projects/moonlight-qt/AntiHooking -I/opt/homebrew/include/QtQuickControls2 -I/opt/homebrew/include/QtQuick -I/opt/homebrew/include/QtOpenGL -I/opt/homebrew/include/QtSvg -I/opt/homebrew/include/QtGui -I/opt/homebrew/include/QtQml -I/opt/homebrew/include -I/opt/homebrew/include/QtQmlIntegration -I/opt/homebrew/include/QtNetwork -I/opt/homebrew/include/QtCore -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/21/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/opt/homebrew/lib gui/computermodel.cpp -o debug/computermodel.moc
@@ -2142,6 +2157,10 @@ debug/main.o: main.cpp /opt/homebrew/include/QtGui/QGuiApplication \
 		/opt/homebrew/include/QtCore/QtGlobal \
 		/opt/homebrew/include/QtCore/QAbstractListModel \
 		/opt/homebrew/include/QtCore/qabstractitemmodel.h \
+		/opt/homebrew/include/QtCore/QDateTime \
+		/opt/homebrew/include/QtCore/qdatetime.h \
+		/opt/homebrew/include/QtCore/QHash \
+		/opt/homebrew/include/QtCore/qhash.h \
 		gui/appmodel.h \
 		backend/boxartmanager.h \
 		/opt/homebrew/include/QtCore/QDir \
@@ -4544,8 +4563,18 @@ debug/computermodel.o: gui/computermodel.cpp gui/computermodel.h \
 		../libs/mac/include/SDL2/SDL_ttf.h \
 		/opt/homebrew/include/QtCore/QAbstractListModel \
 		/opt/homebrew/include/QtCore/qabstractitemmodel.h \
+		/opt/homebrew/include/QtCore/QDateTime \
+		/opt/homebrew/include/QtCore/qdatetime.h \
+		/opt/homebrew/include/QtCore/QHash \
+		/opt/homebrew/include/QtCore/qhash.h \
 		/opt/homebrew/include/QtCore/QThreadPool \
 		/opt/homebrew/include/QtCore/qthreadpool.h \
+		/opt/homebrew/include/QtCore/QJsonDocument \
+		/opt/homebrew/include/QtCore/qjsondocument.h \
+		/opt/homebrew/include/QtCore/QJsonObject \
+		/opt/homebrew/include/QtCore/qjsonobject.h \
+		/opt/homebrew/include/QtCore/QPointer \
+		/opt/homebrew/include/QtCore/qpointer.h \
 		debug/computermodel.moc
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug/computermodel.o gui/computermodel.cpp
 

@@ -17,6 +17,7 @@
         <file alias="gui/NavigableMenu.qml">gui/NavigableMenu.qml</file>
         <file alias="gui/ErrorMessageDialog.qml">gui/ErrorMessageDialog.qml</file>
         <file alias="gui/NavigableMessageDialog.qml">gui/NavigableMessageDialog.qml</file>
+        <file alias="gui/PairingDialog.qml">gui/PairingDialog.qml</file>
         <file alias="gui/NavigableDialog.qml">gui/NavigableDialog.qml</file>
         <file alias="gui/CenteredGridView.qml">gui/CenteredGridView.qml</file>
         <file alias="gui/CliPair.qml">gui/CliPair.qml</file>

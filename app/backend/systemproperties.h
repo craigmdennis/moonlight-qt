@@ -39,6 +39,10 @@ public:
     Q_INVOKABLE QRect getSafeAreaResolution(int displayIndex);
     Q_INVOKABLE int getRefreshRate(int displayIndex);
 
+    // First three numbers of this Mac's private IPv4 address with a trailing dot (for example
+    // "192.168.1."), so adding a PC usually means typing only the last number. Empty if none.
+    Q_INVOKABLE QString localSubnetPrefix();
+
     Q_INVOKABLE void startAsyncLoad();
     Q_INVOKABLE void waitForAsyncLoad();
     Q_INVOKABLE void refreshDisplays();
