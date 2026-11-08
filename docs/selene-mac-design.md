@@ -47,3 +47,20 @@ Fetched from Apple's HIG JSON (`https://developer.apple.com/tutorials/data/desig
 
 - Fork location: local clone only until the user approves creating `craigmdennis/moonlight-qt`.
 - Priority of performance versus security work.
+
+## Status (2026-11-08, branch selene-mac)
+
+Built and compiling, not yet reviewed on screen by the user:
+
+- Tile: portrait card, tint, badge (Online, Offline, Not Paired, In Use, spinner), state line, 8 pt larger hit area.
+- Apollo: Steam line (`/moonlight/steam`), Sleep PC (`/moonlight/sleep`, 4 s spinner then 20 s Offline hold), wallpaper backdrop (`/moonlight/wallpaper`, validated as an image, capped at 16 MB, cached one hour).
+- Native macOS Qt style with dark colour scheme forced (Qt 6.8+); pairing sheet with large PIN digits; Add PC prefilled with the Mac's private subnet.
+- Settings: all seven groups kept; sky-blue titles removed.
+
+Design calls:
+
+- The state line sits under each tile, not in one line above the row, because a pointer or finger has no single focused tile the way the Apple TV remote does.
+- Settings stay one page opened with the toolbar button and Cmd-comma, replacing the tvOS drawer plus system Settings split.
+- Touch: the only hover-only content is tooltips, which the guidance says need no touch equivalent. Context menu opens on touch-and-hold. Controls keep their size.
+
+Not started: Keychain storage for the pairing identity, notarization and hardened runtime, startup and decode profiling.
